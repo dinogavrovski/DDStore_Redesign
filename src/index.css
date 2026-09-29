@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/*
+  Tailwind v4 config lives here. Every variable in @theme becomes utility classes:
+  --color-brand-600  ->  bg-brand-600, text-brand-600, border-brand-600 ...
+  Change the brand color in one place and the whole site follows.
+*/
+@theme {
+  /* System fonts: zero download, instant text rendering */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* DDStore red */
+  --color-brand-50: #fef2f2;
+  --color-brand-100: #fee2e2;
+  --color-brand-500: #ef4444;
+  --color-brand-600: #dc2626;
+  --color-brand-700: #b91c1c;
+
+  /* Header / dark surfaces */
+  --color-ink-800: #1f2937;
+  --color-ink-900: #111827;
+  --color-ink-950: #0b0f17;
+
+  /* Deal / sale highlight (like Best Buy's yellow tag) */
+  --color-deal: #facc15;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-100 text-gray-900 antialiased;
+  }
+}
+
+/* Hides the scrollbar on horizontal product rails but keeps them scrollable */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
