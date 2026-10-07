@@ -13,6 +13,13 @@ export default function SearchBar() {
   const debouncedTerm = useDebounce(term, 300);
   const navigate = useNavigate();
 
+  const { data, isFetching } = useQuery({
+    queryKey: ["search", debouncedTerm],
+    queryFn: () => searchProducts(debouncedTerm, { limit: 6 }),
+    enabled: debouncedTerm.length >= 2,
+    placeholderData: keepPreviousData,
+  });
+
   // ============================================================
   // TODO #4a: fetch live suggestions with TanStack Query
   // ============================================================
@@ -31,9 +38,7 @@ export default function SearchBar() {
   //      so the dropdown doesn't flicker empty on each keystroke.
   //  - data is `undefined` before the first fetch, so default it:
   //      const suggestions = data ?? [];
-  const suggestions = [];
-  const isFetching = false;
-
+  const suggestions = data ?? [];
   // ============================================================
   // TODO #4b: go to the search results page on Enter / button click
   // ============================================================
@@ -46,6 +51,9 @@ export default function SearchBar() {
   //  - Close the dropdown afterwards (setIsFocused(false)).
   function handleSubmit(e) {
     e.preventDefault();
+    if (!term.trim()) return;
+    navigate({ to: "/search", search: { q: term.trim() } });
+    setIsFocused(false);
   }
 
   const showDropdown = isFocused && term.trim().length >= 2;
@@ -98,7 +106,9 @@ export default function SearchBar() {
                     className="flex items-center justify-between gap-4 px-4 py-2.5 text-sm hover:bg-gray-100"
                   >
                     <span className="line-clamp-1">{p.name}</span>
-                    <span className="shrink-0 font-semibold">{formatPrice(p.price)}</span>
+                    <span className="shrink-0 font-semibold">
+                      {formatPrice(p.price)}
+                    </span>
                   </Link>
                 </li>
               ))}
